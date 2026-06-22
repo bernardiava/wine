@@ -86,15 +86,20 @@ def process_table(table_code, table_name):
     data_df.columns = countries
     
     # First column is year
-    data_df['Year'] = data_df.iloc[:, 0]
-    data_df['Year'] = pd.to_numeric(data_df['Year'], errors='coerce')
+    year_col = data_df.iloc[:, 0]
+    data_df['Year'] = pd.to_numeric(year_col, errors='coerce')
     
     # Set Year as index
     data_df = data_df.set_index('Year')
     
-    # Convert all columns to numeric
+    # Convert all columns to numeric, handling potential issues
     for col in data_df.columns:
-        data_df[col] = pd.to_numeric(data_df[col], errors='coerce')
+        if col != 'Year':  # Skip Year since it's already the index
+            try:
+                data_df[col] = pd.to_numeric(data_df[col], errors='coerce')
+            except (TypeError, ValueError):
+                # If conversion fails, skip this column
+                continue
     
     return data_df
 
