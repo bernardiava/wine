@@ -1,1 +1,26 @@
-(empty)
+# Streamlit
+.streamlit/secrets.toml
+*.pyc
+__pycache__/
+
+# Python
+venv/
+env/
+.env
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Cache
+.cache/

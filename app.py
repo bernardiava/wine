@@ -60,25 +60,30 @@ st.markdown("""
         margin: 1rem 0;
         border-radius: 0 8px 8px 0;
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        color: #1a202c !important;
     }
     .analysis-box h4 {
-        color: #722F37;
+        color: #722F37 !important;
         font-weight: bold;
         margin-top: 0;
     }
     .analysis-box p {
-        color: #2c3e50;
+        color: #2c3e50 !important;
         line-height: 1.6;
     }
     .analysis-box strong {
-        color: #8B4513;
+        color: #1a202c !important;
+        font-weight: 600;
     }
-    .analysis-box ul {
-        color: #2c3e50;
+    .analysis-box ol, .analysis-box ul {
+        color: #2c3e50 !important;
         line-height: 1.8;
+        margin: 1rem 0;
+        padding-left: 1.5rem;
     }
     .analysis-box li {
         margin-bottom: 0.5rem;
+        color: #2c3e50 !important;
     }
 </style>
 """, unsafe_allow_html=True)
