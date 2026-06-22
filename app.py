@@ -149,7 +149,7 @@ def load_all_data():
         'population': process_table('T58', 'T58 Population'),
         'gdp': process_table('T61', 'T61 Real GDP'),
         'wine_exports_vol': process_table('T10', 'T10 Wine export vol'),
-        'wine_imports_vol': process_table('T15', 'Wine import vol'),
+        'wine_imports_vol': process_table('T15', 'T15 Wine import vol'),
         'wine_exports_value': process_table('T21', 'T21 Wine export value'),
         'wine_imports_value': process_table('T25', 'T25 Wine import value'),
         'share_world_production': process_table('T7', 'T7 % world wine prodn'),
