@@ -828,42 +828,60 @@ def show_vineyard_analysis(tables, countries, regions, selected_countries, selec
     wine_prod = tables['wine_production']
     
     if selected_countries:
-        productivity = wine_prod.loc[mask] / vine_area.loc[mask] * 1000  # Liters per hectare
+        # Find common years between vine_area and wine_prod within the selected range
+        common_years = vine_area.index.intersection(wine_prod.index)
+        common_years = common_years[(common_years >= year_range[0]) & (common_years <= year_range[1])]
         
-        col1, col2 = st.columns(2)
+        # Filter both DataFrames to common years and selected countries that exist in both
+        valid_countries = [c for c in selected_countries if c in vine_area.columns and c in wine_prod.columns]
         
-        with col1:
-            fig = go.Figure()
-            for country in selected_countries[:6]:
-                if country in productivity.columns:
-                    fig.add_trace(go.Scatter(
-                        x=productivity.index,
-                        y=productivity[country],
-                        mode='lines',
-                        name=country
-                    ))
+        if valid_countries and len(common_years) > 0:
+            vine_area_filtered = vine_area.loc[common_years, valid_countries]
+            wine_prod_filtered = wine_prod.loc[common_years, valid_countries]
             
-            fig.update_layout(
-                title='Wine Yield (Liters per Hectare)',
-                xaxis_title='Year',
-                yaxis_title='Yield (L/ha)',
-                height=400
-            )
-            st.plotly_chart(fig, use_container_width=True)
-        
-        with col2:
-            # Latest year comparison
-            latest_year = productivity.index.max()
-            prod_latest = productivity.loc[latest_year, selected_countries].dropna()
+            # Calculate productivity (Liters per hectare)
+            # Avoid division by zero
+            productivity = wine_prod_filtered / vine_area_filtered.replace(0, np.nan) * 1000
             
-            fig = px.bar(
-                x=prod_latest.index,
-                y=prod_latest.values,
-                title=f'Yield Comparison ({int(latest_year)})',
-                labels={'x': 'Country', 'y': 'Yield (L/ha)'}
-            )
-            fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                fig = go.Figure()
+                for country in valid_countries[:6]:
+                    if country in productivity.columns:
+                        fig.add_trace(go.Scatter(
+                            x=productivity.index,
+                            y=productivity[country],
+                            mode='lines',
+                            name=country
+                        ))
+                
+                fig.update_layout(
+                    title='Wine Yield (Liters per Hectare)',
+                    xaxis_title='Year',
+                    yaxis_title='Yield (L/ha)',
+                    height=400
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            
+            with col2:
+                # Latest year comparison
+                latest_year = productivity.index.max()
+                prod_latest = productivity.loc[latest_year].dropna()
+                
+                if len(prod_latest) > 0:
+                    fig = px.bar(
+                        x=prod_latest.index,
+                        y=prod_latest.values,
+                        title=f'Yield Comparison ({int(latest_year)})',
+                        labels={'x': 'Country', 'y': 'Yield (L/ha)'}
+                    )
+                    fig.update_layout(height=400)
+                    st.plotly_chart(fig, use_container_width=True)
+                else:
+                    st.info("No productivity data available for the selected countries and year range.")
+        else:
+            st.warning("No common data available for the selected countries in both production and vineyard area datasets.")
     
     # Area efficiency
     st.markdown("### Vineyard Area per Million USD GDP")
