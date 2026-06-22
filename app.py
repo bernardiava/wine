@@ -54,10 +54,31 @@ st.markdown("""
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .analysis-box {
-        background-color: #fff5f5;
+        background-color: #ffffff;
         border-left: 4px solid #722F37;
-        padding: 1rem;
+        padding: 1.5rem;
         margin: 1rem 0;
+        border-radius: 0 8px 8px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .analysis-box h4 {
+        color: #722F37;
+        font-weight: bold;
+        margin-top: 0;
+    }
+    .analysis-box p {
+        color: #2c3e50;
+        line-height: 1.6;
+    }
+    .analysis-box strong {
+        color: #8B4513;
+    }
+    .analysis-box ul {
+        color: #2c3e50;
+        line-height: 1.8;
+    }
+    .analysis-box li {
+        margin-bottom: 0.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
